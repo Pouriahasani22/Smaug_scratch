@@ -38,6 +38,21 @@ void SmvSoftmaxOp::run() {
         Tensor* outputTile = outputs[i];
         const TensorShape& inputShape = inputTile->getShape();
         const TensorShape& outputShape = outputTile->getShape();
+
+        std::cout << "inputTileIdx: " << i << ",\t";
+        std::cout << "outputTileIdx: " << i << std::endl;
+        
+        std::cout << "input Tile dimension: ";             
+        for(int j{0};j<inputShape.ndims();j++){
+                std::cout << "[" << j << "]: " << inputShape[j]<<"\t";
+        }
+        
+        std::cout << "\noutput tile dimension: ";                      
+        for(int j{0};j<outputShape.ndims();j++){
+                std::cout << "[" << j << "]: " << outputShape[j]<<"\t";
+        }
+        std::cout <<std::endl;
+
         mapArrayToAccel(smv::kEltwiseOpHw, "host_inputs",
                         inputTile->data<float16>(),
                         inputShape.storageSize() * sizeof(float16));

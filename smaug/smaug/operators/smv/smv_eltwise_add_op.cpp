@@ -1,4 +1,5 @@
 #include "smaug/core/backend.h"
+#include "smaug/core/tensor_utils.h"
 #include "smaug/operators/common.h"
 #include "smaug/operators/smv/smv_eltwise_add_op.h"
 #include "smaug/operators/smv/smv_unary_op_common.h"
@@ -27,6 +28,21 @@ void SmvEltwiseAddOp::runX(TiledTensor& inputs0,
         Tensor* outputTile = outputs[i];
         const TensorShape& inputShape = input0Tile->getShape();
         const TensorShape& outputShape = outputTile->getShape();
+
+        std::cout << "inputTileIdx: " << i << ",\t";
+        std::cout << "outputTileIdx: " << i << std::endl;
+        
+        std::cout << "input Tile dimension: ";             
+        for(int j{0};j<inputShape.ndims();j++){
+                std::cout << "[" << j << "]: " << inputShape[j]<<"\t";
+        }
+        
+        std::cout << "\noutput tile dimension: ";                      
+        for(int j{0};j<outputShape.ndims();j++){
+                std::cout << "[" << j << "]: " << outputShape[j]<<"\t";
+        }
+        std::cout <<std::endl;
+
         mapArrayToAccel(smv::kEltwiseOpHw, "host_inputs0",
                         input0Tile->data<float16>(),
                         inputShape.storageSize() * sizeof(float16));
@@ -55,9 +71,12 @@ void SmvEltwiseAddOp::tile() {
                      inputs0->getShape().storageSize());
     TensorShape tileShape(
             { 1, maxTileSize }, DataLayout::NC, SmvBackend::Alignment);
-    tiledTensors[0] = generateTiles(inputs0, tileShape, this, false);
-    tiledTensors[1] = generateTiles(inputs1, tileShape, this, false);
-    tiledTensors[2] = generateTiles(outputs, tileShape, this, false);
+    tiledTensors[0] = generateTiledTensorPerBatchNC(
+        inputs0, tileShape, this, false);
+    tiledTensors[1] = generateTiledTensorPerBatchNC(
+        inputs1, tileShape, this, false);
+    tiledTensors[2] = generateTiledTensorPerBatchNC(
+        outputs, tileShape, this, false);
 }
 
 void SmvEltwiseAddOp::run() {

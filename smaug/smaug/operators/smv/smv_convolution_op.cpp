@@ -150,6 +150,27 @@ void SmvConvolutionOp::runNHWC(TiledTensor& inputs,
                                                weightsShape[3] };
                         int outputDims[4] = { outputShape[0], outputShape[1],
                                               outputShape[2], outputShape[3] };
+                            std::cout << "\n******Accelerator Id: " << accelId + currAccelIdx << "*****"
+                                        << std::endl;
+                            std::cout << "inputTileIdx: " << inputTileIdx << ",\t";
+                            std::cout << "weightTileIdx: " << weightTileIdx << ",\t";
+                            std::cout << "outputTileIdx: " << outputTileIdx << std::endl;
+			                std::cout << "input Tile dimension: ";
+                            for (int j{0}; j < 4; j++) {
+                                if (inputDims != NULL)
+                                     std::cout << "[" << j << "]: " << inputDims[j] << "\t";
+                            }
+                            std::cout << "\nweight tile dimension: ";
+                            for (int j{0}; j < 4; j++) {
+                                if (weightsDims != NULL)
+                                     std::cout << "[" << j << "]: " << weightsDims[j] << "\t";
+                            }
+                            std::cout << "\noutput tile dimension: ";
+                            for (int j{0}; j < 4; j++) {
+                                if (outputDims != NULL)
+                                     std::cout << "[" << j << "]: " << outputDims[j] << "\t";
+                            }
+                            std::cout <<std::endl;
                         // The 'ifmap_start' argument of the kernel is for
                         // handling when inputChanTiles < weightChanTiles. It
                         // provides the starting channel of the input tile that

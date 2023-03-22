@@ -70,6 +70,21 @@ void SmvPoolingOp::runNHWC(TiledTensor& inputs, TiledTensor& outputs) {
                     // from.
                     int ofmapStart = (iC == oC) ? 0 : ofmapOffset;
 
+                    std::cout << "inputTileIdx: " << inputTileIdx << ",\t";
+                    std::cout << "outputTileIdx: " << outputTileIdx << std::endl;
+                    std::cout << "input Tile dimension: ";
+                    for (int j{0}; j < 4; j++) {
+                        if (inputDims != NULL)
+                                std::cout << "[" << j << "]: " << inputDims[j] << "\t";
+                    }
+
+                    std::cout << "\noutput tile dimension: ";
+                    for (int j{0}; j < 4; j++) {
+                        if (outputDims != NULL)
+                                std::cout << "[" << j << "]: " << outputDims[j] << "\t";
+                    }
+                    std::cout <<std::endl;
+
                     invokeKernel(
                             smv::kPoolingHw,
                             opType == MaxPooling ? smv_maxpooling_nhwc_vec_fxp

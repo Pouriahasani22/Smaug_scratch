@@ -61,6 +61,22 @@ void SmvBatchNormOp::runNA(TiledTensor& inputs,
                             outputTile->data<float16>(),
                             outputShape.storageSize() * sizeof(float16));
             int inputDims[2] = { inputShape[0], inputShape[1] };
+
+            std::cout << "inputTileIdx: " << inputTileIdx << ",\t";
+            std::cout << "weightTileIdx: " << weightTileIdx << ",\t";
+            std::cout << "outputTileIdx: " << outputTileIdx << std::endl;
+            std::cout << "input Tile dimension: ";
+            for (int j{0}; j < 2; j++) {
+                if (inputDims != NULL)
+                        std::cout << "[" << j << "]: " << inputDims[j] << "\t";
+            }
+            std::cout << "\noutput tile dimension: ";
+            // if(outputShape != NULL){                       
+                for(int j{0};j<outputShape.ndims();j++){
+                        std::cout << "[" << j << "]: " << outputShape[j]<<"\t";
+                }
+            // }
+            std::cout <<std::endl;
             // If the input and weight tiles belong to the same channel
             // group, then their data will be loaded at the same time into
             // the spads, so we start from the beginning of the tile.

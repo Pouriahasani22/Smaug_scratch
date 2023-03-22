@@ -114,6 +114,28 @@ void SmvInnerProductOp::runNWA(TiledTensor& inputs,
                                    (W == weightNeuronTiles - 1) &&
                                    (wC == weightActTiles - 1);
 
+
+
+                std::cout << "inputTileIdx: " << inputTileIdx << ",\t";
+                std::cout << "weightTileIdx: " << weightTileIdx << ",\t";
+                std::cout << "outputTileIdx: " << outputTileIdx << std::endl;
+                std::cout << "input Tile dimension: ";
+                for (int j{0}; j < 2; j++) {
+                    if (inputDims != NULL)
+                            std::cout << "[" << j << "]: " << inputDims[j] << "\t";
+                }
+                std::cout << "\nweight tile dimension: ";
+                for (int j{0}; j < 2; j++) {
+                    if (weightsDims != NULL)
+                            std::cout << "[" << j << "]: " << weightsDims[j] << "\t";
+                }
+                std::cout << "\noutput tile dimension: ";
+                for (int j{0}; j < 2; j++) {
+                    if (outputDims != NULL)
+                            std::cout << "[" << j << "]: " << outputDims[j] << "\t";
+                }
+                std::cout <<std::endl;
+
                 std::unique_ptr<volatile int> finishFlag = invokeKernelNoBlock(
                         currAccelIdx, smv::kInnerProductHw + currAccelIdx,
                         smv_matrix_multiply_transpose_nc_vec_fxp,
